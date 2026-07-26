@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Staff | Campus Canteen Pre-Order and Queue Management System</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Quicksand:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="navbar canteen-nav navbar-dark navbar-expand-md py-2">
+  <div class="container">
+    <a class="navbar-brand" href="index.html">Campus Canteen Pre-Order and Queue Management System<small>Staff Window · Queue Dashboard</small></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav1">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="nav1">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link active" href="#queue">Live Queue</a></li>
+        <li class="nav-item"><a class="nav-link" href="#capacity">Kitchen Capacity</a></li>
+        <li class="nav-item"><a class="nav-link" href="index.html">Switch Window</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" onclick="logout()">Log Out</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container py-4" id="queue">
+
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+      <div class="stat-tile"><div class="num" id="statPlaced">0</div><div class="label">Placed</div></div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="stat-tile"><div class="num" id="statPrep">0</div><div class="label">Preparing</div></div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="stat-tile"><div class="num" id="statReady">0</div><div class="label">Ready</div></div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="stat-tile"><div class="num" id="etaLoad">~9 min</div><div class="label">Est. wait for new orders</div></div>
+    </div>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-md-3">
+      <div class="queue-col" id="col-placed">
+        <h6>Placed <span class="count-badge" id="cnt-placed">0</span></h6>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="queue-col" id="col-preparing">
+        <h6>Preparing <span class="count-badge" id="cnt-preparing">0</span></h6>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="queue-col" id="col-ready">
+        <h6>Ready for Pickup <span class="count-badge" id="cnt-ready">0</span></h6>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="queue-col" id="col-collected">
+        <h6>Collected <span class="count-badge" id="cnt-collected">0</span></h6>
+      </div>
+    </div>
+  </div>
+
+  <div id="capacity" class="mt-5">
+    <h4 class="mb-3">Kitchen Capacity</h4>
+    <div class="panel p-3">
+      <div class="row g-3 align-items-center">
+        <div class="col-md-4">
+          <label class="form-label mono" style="font-size:.75rem; text-transform:uppercase;">Active cooks</label>
+          <input type="number" class="form-control" value="4">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label mono" style="font-size:.75rem; text-transform:uppercase;">Max parallel orders</label>
+          <input type="number" class="form-control" value="10">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label mono" style="font-size:.75rem; text-transform:uppercase;">Current load</label>
+          <div class="stock-bar" style="height:10px;"><span style="width:60%"></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="canteen-footer py-3 mt-5">
+  <div class="container">23CSE202 · Campus Canteen Pre-Order &amp; Queue Management System</div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// --- Auth guard: redirect to login if no active session for this role ---
+if (sessionStorage.getItem("loggedIn") !== "staff") {
+  window.location.href = "login.html?role=staff";
+}
+function logout(){
+  sessionStorage.removeItem("loggedIn");
+  sessionStorage.removeItem("loginId");
+  window.location.href = "login.html";
+}
+
+let orders = [
+  {token:"A-039", items:"1× Veg Thali, 1× Coffee", slot:"12:30–12:45", status:"placed", walkin:false},
+  {token:"A-040", items:"2× Masala Dosa", slot:"12:30–12:45", status:"placed", walkin:false},
+  {token:"W-011", items:"1× Bread Omelette", slot:"Walk-in", status:"placed", walkin:true},
+  {token:"A-037", items:"1× Chicken Biryani", slot:"12:15–12:30", status:"preparing", walkin:false},
+  {token:"A-036", items:"1× Veg Puff, 1× Lime Soda", slot:"12:15–12:30", status:"preparing", walkin:false},
+  {token:"A-034", items:"1× Veg Thali", slot:"12:00–12:15", status:"ready", walkin:false},
+  {token:"A-031", items:"2× Filter Coffee", slot:"11:45–12:00", status:"collected", walkin:false},
+];
+
+const stampClass = {placed:"stamp-placed", preparing:"stamp-preparing", ready:"stamp-ready", collected:"stamp-collected"};
+const nextStatus = {placed:"preparing", preparing:"ready", ready:"collected"};
+const nextLabel = {placed:"Start Preparing", preparing:"Mark Ready", ready:"Mark Collected"};
+const stampLabel = {placed:"Placed", preparing:"Preparing", ready:"Ready", collected:"Collected"};
+
+function render(){
+  ["placed","preparing","ready","collected"].forEach(st=>{
+    const col = document.getElementById("col-"+st);
+    col.innerHTML = `<h6>${st.charAt(0).toUpperCase()+st.slice(1)}${st==='ready'?' for Pickup':''} <span class="count-badge">${orders.filter(o=>o.status===st).length}</span></h6>`;
+  });
+
+  orders.forEach((o, idx)=>{
+    const col = document.getElementById("col-"+o.status);
+    const btn = o.status==="collected" ? "" :
+      `<button class="btn btn-sm btn-marigold w-100 mt-2" onclick="advance(${idx})">${nextLabel[o.status]}</button>`;
+    col.insertAdjacentHTML("beforeend", `
+      <div class="ticket mb-4 mt-2">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <div class="mono text-uppercase" style="font-size:.6rem; color:var(--ink-soft);">${o.walkin?'Walk-in':'Pre-order'}</div>
+            <div class="token-no" style="font-size:1.2rem;">${o.token}</div>
+          </div>
+          <span class="stamp ${stampClass[o.status]}" style="font-size:.6rem;">${stampLabel[o.status]}</span>
+        </div>
+        <div class="seam" style="margin:.5rem 0;"></div>
+        <div class="mono" style="font-size:.72rem;">${o.items}</div>
+        <div class="mono mt-1" style="font-size:.68rem; color:var(--ink-soft);">Slot: ${o.slot}</div>
+        ${btn}
+      </div>`);
+  });
+
+  document.getElementById("statPlaced").textContent = orders.filter(o=>o.status==="placed").length;
+  document.getElementById("statPrep").textContent = orders.filter(o=>o.status==="preparing").length;
+  document.getElementById("statReady").textContent = orders.filter(o=>o.status==="ready").length;
+}
+
+function advance(idx){
+  const o = orders[idx];
+  o.status = nextStatus[o.status];
+  render();
+}
+
+render();
+</script>
+</body>
+</html>

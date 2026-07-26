@@ -1,0 +1,412 @@
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Quicksand:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap');
+
+/* ===========================================================
+   Campus Canteen Pre-Order & Queue Management — design tokens
+   Signature element: the perforated queue TICKET, used for
+   order tracking (student) and the order rail (staff/admin).
+   =========================================================== */
+
+:root {
+  --board-dark: #C6579E;   /* soft berry pink — nav, headers */
+  --board-dark-2: #A63F80; /* deeper berry for hover/depth */
+  --paper: #FFF4FA;        /* soft blush background */
+  --paper-2: #FCE3F0;      /* light pink panel background */
+  --ink: #4A3245;          /* plummy dark text */
+  --ink-soft: #A487A0;     /* muted mauve labels */
+  --marigold: #FFD873;     /* butter-yellow accent / CTA */
+  --marigold-dark: #E8A93A;
+  --rust: #FF90A8;         /* placed / waiting — soft coral pink */
+  --sage: #9C8CF0;         /* ready / available — periwinkle (no green!) */
+  --steel: #CDA4C2;        /* borders, dividers */
+  --steel-line: #F7DCEC;
+
+  --font-display: 'Baloo 2', 'Oswald', sans-serif;
+  --font-body: 'Quicksand', 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+}
+
+h1, h2, h3, h4, .display-font {
+  font-family: var(--font-display);
+  letter-spacing: 0.01em;
+  color: var(--board-dark-2);
+  font-weight: 700;
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+/* ---------- Navbar ---------- */
+.canteen-nav {
+  background: linear-gradient(135deg, var(--board-dark), #E88BC0);
+  border-bottom: 4px solid var(--marigold);
+}
+.canteen-nav .navbar-brand {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: var(--paper) !important;
+  font-size: 1.05rem;
+  line-height: 1.25;
+  max-width: 480px;
+}
+.canteen-nav .navbar-brand small {
+  display: block;
+  font-family: var(--font-mono);
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 0.65rem;
+  color: var(--marigold);
+}
+.canteen-nav .nav-link {
+  color: #FCE3F0 !important;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+.canteen-nav .nav-link.active {
+  color: var(--marigold) !important;
+}
+
+/* ---------- Buttons ---------- */
+.btn-marigold {
+  background: var(--marigold);
+  border-color: var(--marigold-dark);
+  color: var(--board-dark-2);
+  font-family: var(--font-display);
+  letter-spacing: 0.01em;
+  font-weight: 700;
+  border-radius: 100px;
+  padding: 0.5rem 1.2rem;
+}
+.btn-marigold:hover {
+  background: var(--marigold-dark);
+  color: var(--paper);
+}
+.btn-board {
+  background: var(--board-dark);
+  color: var(--paper);
+  font-family: var(--font-display);
+  font-weight: 700;
+  border-radius: 100px;
+}
+.btn-board:hover {
+  background: var(--board-dark-2);
+  color: var(--marigold);
+}
+.btn-outline-board {
+  border: 1.5px solid var(--board-dark);
+  color: var(--board-dark);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.82rem;
+  border-radius: 100px;
+}
+.btn-outline-board:hover {
+  background: var(--board-dark);
+  color: var(--paper);
+}
+
+/* ---------- Status chips ---------- */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.6rem;
+  border-radius: 100px;
+  border: 1px solid transparent;
+}
+.chip::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.chip-placed  { color: var(--rust); background: rgba(193,80,46,0.1); }
+.chip-preparing { color: var(--marigold-dark); background: rgba(232,163,61,0.15); }
+.chip-ready { color: var(--sage); background: rgba(91,140,90,0.12); }
+.chip-collected { color: var(--steel); background: rgba(139,133,120,0.12); }
+
+/* ---------- Menu item card ---------- */
+.menu-card {
+  background: #fff;
+  border: 1px solid var(--steel-line);
+  border-radius: 18px;
+  overflow: hidden;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+.menu-card:hover {
+  box-shadow: 0 10px 24px rgba(198,87,158,0.18);
+  transform: translateY(-3px) scale(1.01);
+}
+.menu-card .cat-tag {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--marigold-dark);
+}
+.menu-card .price {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--board-dark);
+}
+.stock-bar {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--steel-line);
+  overflow: hidden;
+}
+.stock-bar > span {
+  display: block;
+  height: 100%;
+  background: var(--sage);
+}
+.stock-bar.low > span { background: var(--rust); }
+
+/* ===========================================================
+   TICKET — signature component. A physical order-token stub
+   with punched perforation notches at top & bottom, a torn
+   dashed seam, and a stamped status.
+   =========================================================== */
+.ticket {
+  position: relative;
+  background: #fff;
+  border: 1px solid var(--steel-line);
+  border-radius: 16px;
+  padding: 1rem 1.1rem 1.1rem;
+  box-shadow: 0 3px 0 var(--steel-line);
+}
+.ticket::before,
+.ticket::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  height: 14px;
+  background:
+    radial-gradient(circle 6px, var(--paper) 5.5px, transparent 6px) repeat-x;
+  background-size: 20px 14px;
+  background-position: -4px center;
+}
+.ticket::before { top: -7px; }
+.ticket::after { bottom: -7px; }
+
+.ticket .seam {
+  border-top: 2px dashed var(--steel-line);
+  margin: 0.75rem 0;
+}
+.ticket .token-no {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 1.6rem;
+  color: var(--board-dark);
+  letter-spacing: 0.02em;
+}
+.ticket .stamp {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  font-size: 0.72rem;
+  padding: 0.3rem 0.7rem;
+  border: 2px solid currentColor;
+  border-radius: 100px;
+  transform: rotate(-4deg);
+  display: inline-block;
+}
+.stamp-placed { color: var(--rust); }
+.stamp-preparing { color: var(--marigold-dark); }
+.stamp-ready { color: var(--sage); }
+.stamp-collected { color: var(--steel); }
+
+/* Progress rail for ticket status */
+.rail {
+  display: flex;
+  align-items: center;
+  margin: 0.75rem 0 0.25rem;
+}
+.rail .dot {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: var(--steel-line);
+  border: 2px solid var(--steel-line);
+  flex-shrink: 0;
+}
+.rail .dot.done {
+  background: var(--sage);
+  border-color: var(--sage);
+}
+.rail .dot.active {
+  background: var(--marigold);
+  border-color: var(--marigold-dark);
+  box-shadow: 0 0 0 4px rgba(232,163,61,0.25);
+}
+.rail .bar {
+  flex: 1;
+  height: 3px;
+  background: var(--steel-line);
+}
+.rail .bar.done { background: var(--sage); }
+.rail-labels {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-top: 0.15rem;
+}
+
+/* ---------- Counter-select cards (index page) ---------- */
+.counter-card {
+  background: linear-gradient(155deg, var(--board-dark), #D477B5);
+  color: var(--paper);
+  border-radius: 22px;
+  padding: 2.25rem 1.75rem;
+  text-decoration: none;
+  display: block;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--board-dark-2);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.counter-card:hover {
+  transform: translateY(-4px) rotate(-0.5deg);
+  box-shadow: 0 14px 30px rgba(166,63,128,0.3);
+  color: var(--paper);
+}
+.counter-card .window-no {
+  font-family: var(--font-mono);
+  color: var(--marigold);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.counter-card h3 {
+  color: var(--paper);
+  margin: 0.5rem 0 0.6rem;
+}
+.counter-card p {
+  color: #F5DCEC;
+  font-size: 0.9rem;
+  margin-bottom: 0;
+}
+.counter-card .arrow {
+  position: absolute;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  font-size: 1.5rem;
+  color: var(--marigold);
+  transition: transform 0.15s ease;
+}
+.counter-card:hover .arrow {
+  transform: translateX(6px);
+}
+
+/* ---------- Kanban column (staff) ---------- */
+.queue-col {
+  background: var(--paper-2);
+  border: 1px solid var(--steel-line);
+  border-radius: 18px;
+  padding: 0.85rem;
+  min-height: 60vh;
+}
+.queue-col h6 {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.queue-col .count-badge {
+  background: var(--board-dark);
+  color: var(--paper);
+  border-radius: 100px;
+  font-size: 0.7rem;
+  padding: 0.05rem 0.5rem;
+}
+
+/* ---------- Section panel ---------- */
+.panel {
+  background: #fff;
+  border: 1px solid var(--steel-line);
+  border-radius: 18px;
+  overflow: hidden;
+}
+.panel-header {
+  background: var(--board-dark);
+  color: var(--paper);
+  padding: 0.65rem 1.1rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 0.01em;
+}
+
+/* ---------- Stat tile ---------- */
+.stat-tile {
+  background: #fff;
+  border: 1px solid var(--steel-line);
+  border-left: 5px solid var(--marigold);
+  border-radius: 16px;
+  padding: 1rem 1.1rem;
+}
+.stat-tile .num {
+  font-family: var(--font-mono);
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: var(--board-dark);
+}
+.stat-tile .label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+}
+
+.form-control, .form-select {
+  border-color: var(--steel-line);
+  border-radius: 12px;
+}
+.form-check-input {
+  accent-color: var(--marigold-dark);
+}
+.form-check-input:checked {
+  background-color: var(--marigold);
+  border-color: var(--marigold-dark);
+}
+.form-control:focus, .form-select:focus {
+  border-color: var(--marigold);
+  box-shadow: 0 0 0 0.2rem rgba(232,163,61,0.2);
+}
+
+.table-canteen thead {
+  background: var(--board-dark);
+  color: var(--paper);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+footer.canteen-footer {
+  background: var(--board-dark-2);
+  color: #F3CBE6;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+

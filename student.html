@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Student | Campus Canteen Pre-Order and Queue Management System</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Quicksand:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="navbar canteen-nav navbar-dark navbar-expand-md py-2">
+  <div class="container">
+    <a class="navbar-brand" href="index.html">Campus Canteen Pre-Order and Queue Management System<small>Student Window</small></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav1">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="nav1">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link active" href="#menu">Menu</a></li>
+        <li class="nav-item"><a class="nav-link" href="#tracking">Track Order</a></li>
+        <li class="nav-item"><a class="nav-link" href="#history">History</a></li>
+        <li class="nav-item"><a class="nav-link" href="index.html">Switch Window</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" onclick="logout()">Log Out</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container py-4">
+
+  <div class="d-flex justify-content-between align-items-end flex-wrap gap-2 mb-3">
+    <div>
+      <div class="mono text-uppercase" style="color:var(--marigold-dark); font-size:.75rem; letter-spacing:.06em;">Signed in as</div>
+      <h2 class="mb-0" id="studentGreeting">Student <span class="mono" style="font-size:.9rem; color:var(--ink-soft);">· Window 01</span></h2>
+    </div>
+    <div class="stat-tile">
+      <div class="label">Estimated wait if ordering now</div>
+      <div class="num" id="etaNow">12 min</div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- MENU -->
+    <div class="col-lg-8" id="menu">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h4 class="mb-0">Today's Menu</h4>
+        <select class="form-select form-select-sm" style="width:auto;" id="catFilter">
+          <option value="all">All categories</option>
+          <option value="Meals">Meals</option>
+          <option value="Snacks">Snacks</option>
+          <option value="Beverages">Beverages</option>
+        </select>
+      </div>
+      <div class="row g-3" id="menuGrid"></div>
+    </div>
+
+    <!-- CART / TICKET -->
+    <div class="col-lg-4">
+      <div class="position-sticky" style="top:1rem;">
+        <div class="panel mb-4">
+          <div class="panel-header">Your Order</div>
+          <div class="p-3" id="cartBody">
+            <p class="text-center mono" style="color:var(--ink-soft); font-size:.85rem;">Cart is empty — add items from the menu.</p>
+          </div>
+          <div class="p-3 pt-0" id="cartFooter" style="display:none;">
+            <div class="seam"></div>
+            <div class="d-flex justify-content-between mb-1"><span>Subtotal</span><span class="mono" id="subtotal">₹0</span></div>
+            <div class="mb-3">
+              <label class="form-label mono" style="font-size:.75rem; text-transform:uppercase;">Pickup slot</label>
+              <select class="form-select form-select-sm" id="slotSelect">
+                <option>12:30 – 12:45 PM</option>
+                <option>12:45 – 1:00 PM</option>
+                <option>1:00 – 1:15 PM</option>
+              </select>
+            </div>
+            <button class="btn btn-marigold w-100" onclick="placeOrder()">Place Pre-Order</button>
+          </div>
+        </div>
+
+        <div id="tracking">
+          <h5 class="mb-2">Track Order</h5>
+          <div id="ticketArea">
+            <p class="mono text-center" style="color:var(--ink-soft); font-size:.85rem;">No active order yet.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="my-5" style="border-color:var(--steel-line);">
+
+  <div id="history">
+    <h4 class="mb-3">Order History</h4>
+    <div class="table-responsive panel">
+      <table class="table table-canteen mb-0 align-middle">
+        <thead><tr><th>Token</th><th>Items</th><th>Date</th><th>Status</th><th class="text-end">Amount</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">A-038</td><td>1× Veg Thali, 1× Buttermilk</td><td>22 Jul</td><td><span class="chip chip-collected">Collected</span></td><td class="text-end mono">₹110</td></tr>
+          <tr><td class="mono">A-021</td><td>2× Masala Dosa</td><td>19 Jul</td><td><span class="chip chip-collected">Collected</span></td><td class="text-end mono">₹140</td></tr>
+          <tr><td class="mono">A-009</td><td>1× Filter Coffee</td><td>17 Jul</td><td><span class="chip chip-collected">Collected</span></td><td class="text-end mono">₹20</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<footer class="canteen-footer py-3 mt-5">
+  <div class="container">23CSE202 · Campus Canteen Pre-Order &amp; Queue Management System</div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// --- Auth guard: redirect to login if no active session for this role ---
+if (sessionStorage.getItem("loggedIn") !== "student") {
+  window.location.href = "login.html?role=student";
+}
+function logout(){
+  sessionStorage.removeItem("loggedIn");
+  sessionStorage.removeItem("loginId");
+  window.location.href = "login.html";
+}
+(function showGreeting(){
+  const id = sessionStorage.getItem("loginId");
+  if(id){
+    document.getElementById("studentGreeting").innerHTML =
+      id + ' <span class="mono" style="font-size:.9rem; color:var(--ink-soft);">· Window 01</span>';
+  }
+})();
+
+const MENU = [
+  {id:1, name:"Veg Thali", cat:"Meals", price:60, prep:8, stock:14, desc:"Rice, sambar, 2 curries, curd"},
+  {id:2, name:"Masala Dosa", cat:"Meals", price:50, prep:10, stock:9, desc:"Crisp dosa, potato masala, chutney"},
+  {id:3, name:"Chicken Biryani", cat:"Meals", price:90, prep:12, stock:5, desc:"Served with raita"},
+  {id:4, name:"Veg Puff", cat:"Snacks", price:20, prep:2, stock:20, desc:"Baked pastry, veg filling"},
+  {id:5, name:"Samosa (2 pc)", cat:"Snacks", price:20, prep:3, stock:2, desc:"With mint chutney"},
+  {id:6, name:"Bread Omelette", cat:"Snacks", price:35, prep:6, stock:11, desc:"Double egg, buttered toast"},
+  {id:7, name:"Filter Coffee", cat:"Beverages", price:15, prep:2, stock:30, desc:"South Indian filter coffee"},
+  {id:8, name:"Buttermilk", cat:"Beverages", price:15, prep:1, stock:0, desc:"Spiced chilled buttermilk"},
+  {id:9, name:"Fresh Lime Soda", cat:"Beverages", price:25, prep:2, stock:16, desc:"Sweet or salted"},
+];
+
+let cart = {}; // id -> qty
+let tokenCounter = 43;
+
+function renderMenu(filter="all"){
+  const grid = document.getElementById("menuGrid");
+  grid.innerHTML = "";
+  MENU.filter(m => filter==="all" || m.cat===filter).forEach(item=>{
+    const outOfStock = item.stock === 0;
+    const low = item.stock > 0 && item.stock <= 3;
+    const pct = Math.min(100, (item.stock/20)*100);
+    grid.innerHTML += `
+      <div class="col-sm-6">
+        <div class="menu-card p-3 h-100 d-flex flex-column">
+          <div class="cat-tag">${item.cat}</div>
+          <div class="d-flex justify-content-between align-items-start mt-1">
+            <h6 class="mb-1">${item.name}</h6>
+            <span class="price">₹${item.price}</span>
+          </div>
+          <p class="mb-2" style="font-size:.82rem; color:var(--ink-soft); flex:1;">${item.desc}</p>
+          <div class="stock-bar ${low?'low':''} mb-1"><span style="width:${outOfStock?0:pct}%"></span></div>
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="mono" style="font-size:.7rem; color:${outOfStock?'var(--rust)':'var(--ink-soft)'};">
+              ${outOfStock ? 'Sold out' : item.stock + ' left · ~' + item.prep + ' min'}
+            </span>
+            <button class="btn btn-sm btn-outline-board" ${outOfStock?'disabled':''} onclick="addToCart(${item.id})">Add</button>
+          </div>
+        </div>
+      </div>`;
+  });
+}
+
+function addToCart(id){
+  cart[id] = (cart[id]||0) + 1;
+  renderCart();
+}
+function changeQty(id, delta){
+  cart[id] = (cart[id]||0) + delta;
+  if(cart[id] <= 0) delete cart[id];
+  renderCart();
+}
+function renderCart(){
+  const body = document.getElementById("cartBody");
+  const footer = document.getElementById("cartFooter");
+  const ids = Object.keys(cart);
+  if(ids.length===0){
+    body.innerHTML = `<p class="text-center mono" style="color:var(--ink-soft); font-size:.85rem;">Cart is empty — add items from the menu.</p>`;
+    footer.style.display = "none";
+    return;
+  }
+  let subtotal = 0;
+  body.innerHTML = ids.map(id=>{
+    const item = MENU.find(m=>m.id==id);
+    subtotal += item.price * cart[id];
+    return `<div class="d-flex justify-content-between align-items-center mb-2">
+      <div>
+        <div style="font-size:.88rem;">${item.name}</div>
+        <div class="mono" style="font-size:.72rem; color:var(--ink-soft);">₹${item.price} each</div>
+      </div>
+      <div class="d-flex align-items-center gap-2">
+        <button class="btn btn-sm btn-outline-board" style="padding:0 .5rem;" onclick="changeQty(${id},-1)">−</button>
+        <span class="mono">${cart[id]}</span>
+        <button class="btn btn-sm btn-outline-board" style="padding:0 .5rem;" onclick="changeQty(${id},1)">+</button>
+      </div>
+    </div>`;
+  }).join("");
+  document.getElementById("subtotal").textContent = "₹" + subtotal;
+  footer.style.display = "block";
+}
+
+function placeOrder(){
+  const ids = Object.keys(cart);
+  if(ids.length===0) return;
+  const slot = document.getElementById("slotSelect").value;
+  const token = "A-0" + (tokenCounter++);
+  const itemsText = ids.map(id=>{
+    const item = MENU.find(m=>m.id==id);
+    return `${cart[id]}× ${item.name}`;
+  }).join(", ");
+
+  document.getElementById("ticketArea").innerHTML = `
+    <div class="ticket">
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <div class="mono text-uppercase" style="font-size:.65rem; color:var(--ink-soft);">Token</div>
+          <div class="token-no">${token}</div>
+        </div>
+        <span class="stamp stamp-placed" id="stampEl">Placed</span>
+      </div>
+      <div class="seam"></div>
+      <div class="mono" style="font-size:.8rem;">${itemsText}</div>
+      <div class="mono mt-1" style="font-size:.75rem; color:var(--ink-soft);">Pickup slot: ${slot}</div>
+      <div class="rail" id="railEl">
+        <div class="dot active"></div><div class="bar"></div>
+        <div class="dot"></div><div class="bar"></div>
+        <div class="dot"></div><div class="bar"></div>
+        <div class="dot"></div>
+      </div>
+      <div class="rail-labels"><span>Placed</span><span>Prep</span><span>Ready</span><span>Done</span></div>
+      <div class="mono mt-2" style="font-size:.72rem; color:var(--ink-soft);">Trigger: OrderStatusLog row inserted on each status change ↓</div>
+    </div>`;
+
+  cart = {};
+  renderCart();
+  simulateProgress();
+  document.getElementById("tracking").scrollIntoView({behavior:"smooth"});
+}
+
+function simulateProgress(){
+  const stages = [
+    {dots:1, label:"Preparing", cls:"stamp-preparing"},
+    {dots:2, label:"Ready for Pickup", cls:"stamp-ready"},
+    {dots:3, label:"Collected", cls:"stamp-collected"},
+  ];
+  let i = 0;
+  const interval = setInterval(()=>{
+    if(i >= stages.length){ clearInterval(interval); return; }
+    const s = stages[i];
+    const rail = document.getElementById("railEl");
+    const stamp = document.getElementById("stampEl");
+    if(!rail || !stamp){ clearInterval(interval); return; }
+    const dots = rail.querySelectorAll(".dot");
+    const bars = rail.querySelectorAll(".bar");
+    for(let d=0; d<=s.dots; d++){ dots[d].classList.remove("active"); dots[d].classList.add(d<s.dots?"done":"active"); }
+    for(let b=0; b<s.dots; b++){ bars[b].classList.add("done"); }
+    stamp.textContent = s.label;
+    stamp.className = "stamp " + s.cls;
+    i++;
+  }, 3000);
+}
+
+document.getElementById("catFilter").addEventListener("change", e=>renderMenu(e.target.value));
+renderMenu();
+</script>
+</body>
+</html>

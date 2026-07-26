@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Admin | Campus Canteen Pre-Order and Queue Management System</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Quicksand:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="navbar canteen-nav navbar-dark navbar-expand-md py-2">
+  <div class="container">
+    <a class="navbar-brand" href="index.html">Campus Canteen Pre-Order and Queue Management System<small>Admin Window</small></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav1">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="nav1">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link active" href="#reports">Reports</a></li>
+        <li class="nav-item"><a class="nav-link" href="#menu">Menu &amp; Stock</a></li>
+        <li class="nav-item"><a class="nav-link" href="index.html">Switch Window</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" onclick="logout()">Log Out</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container py-4" id="reports">
+
+  <h4 class="mb-3">Today's Snapshot</h4>
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+      <div class="stat-tile"><div class="num">₹6,240</div><div class="label">Sales today</div></div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="stat-tile"><div class="num">86</div><div class="label">Orders today</div></div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="stat-tile"><div class="num">12:30&ndash;1:00</div><div class="label">Peak ordering hour</div></div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="stat-tile"><div class="num">9.4 min</div><div class="label">Avg. preparation time</div></div>
+    </div>
+  </div>
+
+  <div class="row g-3 mb-5">
+    <div class="col-lg-7">
+      <div class="panel">
+        <div class="panel-header">Most Popular Items (7 days)</div>
+        <div class="p-3">
+          <div class="mb-2 d-flex justify-content-between mono" style="font-size:.8rem;"><span>Veg Thali</span><span>142 orders</span></div>
+          <div class="stock-bar mb-3" style="height:8px;"><span style="width:92%; background:var(--marigold);"></span></div>
+          <div class="mb-2 d-flex justify-content-between mono" style="font-size:.8rem;"><span>Masala Dosa</span><span>118 orders</span></div>
+          <div class="stock-bar mb-3" style="height:8px;"><span style="width:76%; background:var(--marigold);"></span></div>
+          <div class="mb-2 d-flex justify-content-between mono" style="font-size:.8rem;"><span>Filter Coffee</span><span>97 orders</span></div>
+          <div class="stock-bar mb-3" style="height:8px;"><span style="width:63%; background:var(--marigold);"></span></div>
+          <div class="mb-2 d-flex justify-content-between mono" style="font-size:.8rem;"><span>Chicken Biryani</span><span>81 orders</span></div>
+          <div class="stock-bar mb-3" style="height:8px;"><span style="width:52%; background:var(--marigold);"></span></div>
+          <div class="mb-2 d-flex justify-content-between mono" style="font-size:.8rem;"><span>Bread Omelette</span><span>64 orders</span></div>
+          <div class="stock-bar" style="height:8px;"><span style="width:41%; background:var(--marigold);"></span></div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-5">
+      <div class="panel h-100">
+        <div class="panel-header">Orders by Hour</div>
+        <div class="p-3 d-flex align-items-end gap-2" style="height:200px;">
+          <div style="flex:1; background:var(--steel-line); height:20%; border-radius:2px 2px 0 0;" title="8am"></div>
+          <div style="flex:1; background:var(--steel-line); height:15%; border-radius:2px 2px 0 0;" title="9am"></div>
+          <div style="flex:1; background:var(--steel-line); height:35%; border-radius:2px 2px 0 0;" title="10am"></div>
+          <div style="flex:1; background:var(--marigold); height:55%; border-radius:2px 2px 0 0;" title="11am"></div>
+          <div style="flex:1; background:var(--rust); height:100%; border-radius:2px 2px 0 0;" title="12pm"></div>
+          <div style="flex:1; background:var(--rust); height:88%; border-radius:2px 2px 0 0;" title="1pm"></div>
+          <div style="flex:1; background:var(--marigold); height:45%; border-radius:2px 2px 0 0;" title="2pm"></div>
+          <div style="flex:1; background:var(--steel-line); height:22%; border-radius:2px 2px 0 0;" title="3pm"></div>
+        </div>
+        <div class="d-flex justify-content-between px-3 pb-3 mono" style="font-size:.65rem; color:var(--ink-soft);">
+          <span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>1</span><span>2</span><span>3</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="menu" class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="mb-0">Menu &amp; Stock Management</h4>
+    <button class="btn btn-marigold btn-sm" data-bs-toggle="modal" data-bs-target="#addItemModal">+ Add Menu Item</button>
+  </div>
+
+  <div class="table-responsive panel mb-5">
+    <table class="table table-canteen mb-0 align-middle">
+      <thead>
+        <tr><th>Item</th><th>Category</th><th>Price</th><th>Prep time</th><th>Stock today</th><th>Status</th><th></th></tr>
+      </thead>
+      <tbody id="adminMenuBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Add Item Modal -->
+<div class="modal fade" id="addItemModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" style="background:var(--board-dark); color:var(--paper);">
+        <h5 class="modal-title">Add Menu Item</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label class="form-label mono" style="font-size:.75rem; text-transform:uppercase;">Item name</label>
+          <input type="text" class="form-control" placeholder="e.g. Paneer Roll">
+        </div>
+        <div class="row g-2">
+          <div class="col-6">
+            <label class="form-label mono" style="font-size:.75rem; text-transform:uppercase;">Category</label>
+            <select class="form-select"><option>Meals</option><option>Snacks</option><option>Beverages</option></select>
+          </div>
+          <div class="col-6">
+            <label class="form-label mono" style="font-size:.75rem; text-transform:uppercase;">Price (₹)</label>
+            <input type="number" class="form-control" placeholder="45">
+          </div>
+        </div>
+        <div class="row g-2 mt-1">
+          <div class="col-6">
+            <label class="form-label mono" style="font-size:.75rem; text-transform:uppercase;">Prep time (min)</label>
+            <input type="number" class="form-control" placeholder="6">
+          </div>
+          <div class="col-6">
+            <label class="form-label mono" style="font-size:.75rem; text-transform:uppercase;">Opening stock</label>
+            <input type="number" class="form-control" placeholder="15">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline-board" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn btn-marigold" data-bs-dismiss="modal">Save Item</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="canteen-footer py-3 mt-5">
+  <div class="container">23CSE202 · Campus Canteen Pre-Order &amp; Queue Management System</div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// --- Auth guard: redirect to login if no active session for this role ---
+if (sessionStorage.getItem("loggedIn") !== "admin") {
+  window.location.href = "login.html?role=admin";
+}
+function logout(){
+  sessionStorage.removeItem("loggedIn");
+  sessionStorage.removeItem("loginId");
+  window.location.href = "login.html";
+}
+
+let items = [
+  {name:"Veg Thali", cat:"Meals", price:60, prep:8, stock:14},
+  {name:"Masala Dosa", cat:"Meals", price:50, prep:10, stock:9},
+  {name:"Chicken Biryani", cat:"Meals", price:90, prep:12, stock:5},
+  {name:"Veg Puff", cat:"Snacks", price:20, prep:2, stock:20},
+  {name:"Samosa (2 pc)", cat:"Snacks", price:20, prep:3, stock:2},
+  {name:"Bread Omelette", cat:"Snacks", price:35, prep:6, stock:11},
+  {name:"Filter Coffee", cat:"Beverages", price:15, prep:2, stock:30},
+  {name:"Buttermilk", cat:"Beverages", price:15, prep:1, stock:0},
+  {name:"Fresh Lime Soda", cat:"Beverages", price:25, prep:2, stock:16},
+];
+
+function renderTable(){
+  const body = document.getElementById("adminMenuBody");
+  body.innerHTML = items.map((it, idx)=>{
+    const out = it.stock === 0;
+    return `<tr>
+      <td>${it.name}</td>
+      <td class="mono" style="font-size:.8rem;">${it.cat}</td>
+      <td class="mono">₹${it.price}</td>
+      <td class="mono">${it.prep} min</td>
+      <td style="width:140px;">
+        <input type="number" class="form-control form-control-sm" value="${it.stock}" min="0"
+          onchange="updateStock(${idx}, this.value)">
+      </td>
+      <td>${out ? '<span class="chip chip-placed">Sold out</span>' : '<span class="chip chip-ready">Available</span>'}</td>
+      <td><button class="btn btn-sm btn-outline-board">Edit</button></td>
+    </tr>`;
+  }).join("");
+}
+function updateStock(idx, val){
+  items[idx].stock = parseInt(val) || 0;
+  renderTable();
+}
+renderTable();
+</script>
+</body>
+</html>
