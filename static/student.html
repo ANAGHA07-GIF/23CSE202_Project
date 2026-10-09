@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Student | Campus Canteen Pre-Order and Queue Management System</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Quicksand:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap">
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+
+
+<nav class="navbar canteen-nav navbar-dark navbar-expand-md py-2">
+
+  <div class="container">
+
+    <a class="navbar-brand" href="index.html">Campus Canteen Pre-Order and Queue Management System<small>Student Window</small></a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav1">
+
+      <span class="navbar-toggler-icon"></span>
+
+    </button>
+
+    <div class="collapse navbar-collapse" id="nav1">
+
+      <ul class="navbar-nav ms-auto">
+
+        <li class="nav-item"><a class="nav-link active" href="#menu">Menu</a></li>
+
+        <li class="nav-item"><a class="nav-link" href="#tracking">Track Order</a></li>
+
+        <li class="nav-item"><a class="nav-link" href="#history">History</a></li>
+
+        <li class="nav-item"><a class="nav-link" href="index.html">Switch Window</a></li>
+
+        <li class="nav-item"><a class="nav-link" href="#" onclick="deleteMyAccount()">Delete Account</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" onclick="logout()">Log Out</a></li>
+
+      </ul>
+
+    </div>
+
+  </div>
+
+</nav>
+
+
+
+<div class="container py-4">
+
+
+
+  <div class="d-flex justify-content-between align-items-end flex-wrap gap-2 mb-3">
+
+    <div>
+
+      <div class="mono text-uppercase" style="color:var(--marigold-dark); font-size:.75rem; letter-spacing:.06em;">Signed in as</div>
+
+      <h2 class="mb-0" id="studentGreeting">Student <span class="mono" style="font-size:.9rem; color:var(--ink-soft);">· Window 01</span></h2>
+
+    </div>
+
+    <div class="stat-tile">
+
+      <div class="label">Estimated wait if ordering now</div>
+
+      <div class="num" id="etaNow">12 min</div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="row g-4">
+
+    <!-- MENU -->
+
+    <div class="col-lg-8" id="menu">
+
+      <div class="d-flex justify-content-between align-items-center mb-2">
+
+        <h4 class="mb-0">Today's Menu</h4>
+
+        <select class="form-select form-select-sm" style="width:auto;" id="catFilter">
+
+          <option value="all">All categories</option>
+
+          <option value="Meals">Meals</option>
+
+          <option value="Snacks">Snacks</option>
+
+          <option value="Beverages">Beverages</option>
+
+        </select>
+
+      </div>
+
+      <div class="row g-3" id="menuGrid"></div>
+
+    </div>
+
+
+
+    <!-- CART / TICKET -->
+
+    <div class="col-lg-4">
+
+      <div class="position-sticky" style="top:1rem;">
+
+        <div class="panel mb-4">
+
+          <div class="panel-header">Your Order</div>
+
+          <div class="p-3" id="cartBody">
+
+            <p class="text-center mono" style="color:var(--ink-soft); font-size:.85rem;">Cart is empty — add items from the menu.</p>
+
+          </div>
+
+          <div class="p-3 pt-0" id="cartFooter" style="display:none;">
+
+            <div class="seam"></div>
+
+            <div class="d-flex justify-content-between mb-1"><span>Subtotal</span><span class="mono" id="subtotal">₹0</span></div>
+
+            <div class="mb-3">
+
+              <label class="form-label mono" style="font-size:.75rem; text-transform:uppercase;">Pickup slot</label>
+
+              <select class="form-select form-select-sm" id="slotSelect">
+
+                <option>12:30 – 12:45 PM</option>
+
+                <option>12:45 – 1:00 PM</option>
+
+                <option>1:00 – 1:15 PM</option>
+
+              </select>
+
+            </div>
+
+            <button class="btn btn-marigold w-100" onclick="placeOrder()">Place Pre-Order</button>
+
+          </div>
+
+        </div>
+
+
+
+        <div id="tracking">
+
+          <h5 class="mb-2">Track Order</h5>
+
+          <div id="ticketArea">
+
+            <p class="mono text-center" style="color:var(--ink-soft); font-size:.85rem;">No active order yet.</p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+  <hr class="my-5" style="border-color:var(--steel-line);">
+
+
+
+  <div id="history">
+
+    <h4 class="mb-3">Order History</h4>
+
+    <div class="table-responsive panel">
+
+      <table class="table table-canteen mb-0 align-middle">
+
+        <thead><tr><th>Order #</th><th>Items</th><th>Date</th><th>Status</th><th class="text-end">Amount</th><th>Action</th></tr></thead>
+
+        <tbody id="historyBody">
+
+          <tr><td colspan="6" class="text-center mono" style="color:var(--ink-soft); font-size:.85rem;">Loading…</td></tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<footer class="canteen-footer py-3 mt-5">
+
+  <div class="container">23CSE202 · Campus Canteen Pre-Order &amp; Queue Management System</div>
+
+</footer>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+
+const API_BASE = "/api"; // change if your backend runs elsewhere
+
+
+
+// --- Auth guard: verify the session cookie with the backend ---
+
+(async function checkAuth(){
+
+  try {
+
+    const res = await fetch(`${API_BASE}/auth/me`, { credentials: "include" });
+
+    if(!res.ok){
+
+      window.location.href = "login.html?role=student";
+
+      return;
+
+    }
+
+    const data = await res.json();
+
+    if(data.role !== "student"){
+
+      window.location.href = "login.html?role=student";
+
+      return;
+
+    }
+
+    document.getElementById("studentGreeting").innerHTML =
+
+      data.name + ' <span class="mono" style="font-size:.9rem; color:var(--ink-soft);">· Window 01</span>';
+
+  } catch (err) {
+
+    window.location.href = "login.html?role=student";
+
+  }
+
+})();
+
+
+
+
+async function cancelOrder(orderId){
+  if(!confirm(`Cancel order #${orderId}? This is only possible before preparation starts.`)) return;
+  try {
+    const res = await fetch(`${API_BASE}/student/orders/${orderId}/cancel`, {method:"PATCH", credentials:"include"});
+    const data = await res.json();
+    if(!res.ok){ alert(data.error || "Could not cancel order."); return; }
+    await loadOrderHistory();
+    await loadWaitTime();
+    alert("Order cancelled.");
+  } catch(err) { alert("Could not reach the server."); }
+}
+
+async function deleteMyAccount(){
+  if(!confirm("Delete your student account? Order history will be retained without being linked to you. This cannot be undone.")) return;
+  try {
+    const res = await fetch(`${API_BASE}/student/account`, {method:"DELETE", credentials:"include"});
+    const data = await res.json();
+    if(!res.ok){ alert(data.error || "Could not delete account."); return; }
+    alert(data.message || "Account deleted.");
+    window.location.href = "login.html?role=student";
+  } catch(err) { alert("Could not reach the server."); }
+}
+
+async function logout(){
+
+  await fetch(`${API_BASE}/auth/logout`, { method: "POST", credentials: "include" });
+
+  window.location.href = "login.html";
+
+}
+
+
+
+let MENU = []; // loaded from the backend, not hardcoded anymore
+
+let cart = {}; // item_id -> qty
+
+
+
+async function loadMenu(filter = "all"){
+
+  try {
+
+    const res = await fetch(`${API_BASE}/menu`);
+
+    MENU = await res.json();
+
+    renderMenu(filter);
+
+  } catch (err) {
+
+    document.getElementById("menuGrid").innerHTML =
+
+      `<p class="mono text-center" style="color:var(--rust);">Could not load the menu. Is the backend running?</p>`;
+
+  }
+
+}
+
+
+
+async function loadWaitTime(){
+
+  try {
+
+    const res = await fetch(`${API_BASE}/menu/wait-time`);
+
+    const data = await res.json();
+
+    document.getElementById("etaNow").textContent = data.minutes + " min";
+
+  } catch (err) {
+
+    document.getElementById("etaNow").textContent = "—";
+
+  }
+
+}
+
+
+
+function renderMenu(filter="all"){
+
+  const grid = document.getElementById("menuGrid");
+
+  grid.innerHTML = "";
+
+  MENU.filter(m => filter==="all" || m.category===filter).forEach(item=>{
+
+    const outOfStock = item.daily_stock === 0 || !item.is_available;
+
+    const low = item.daily_stock > 0 && item.daily_stock <= 3;
+
+    const pct = Math.min(100, (item.daily_stock/20)*100);
+
+    const readyNote = item.ready_quantity > 0 ? ` · ${item.ready_quantity} ready now` : "";
+
+    grid.innerHTML += `
+
+      <div class="col-sm-6">
+
+        <div class="menu-card p-3 h-100 d-flex flex-column">
+
+          <div class="cat-tag">${item.category}</div>
+
+          <div class="d-flex justify-content-between align-items-start mt-1">
+
+            <h6 class="mb-1">${item.name}</h6>
+
+            <span class="price">₹${item.price}</span>
+
+          </div>
+
+          <p class="mb-2" style="font-size:.82rem; color:var(--ink-soft); flex:1;">~${item.prep_time_min} min prep${readyNote}</p>
+
+          <div class="stock-bar ${low?'low':''} mb-1"><span style="width:${outOfStock?0:pct}%"></span></div>
+
+          <div class="d-flex justify-content-between align-items-center">
+
+            <span class="mono" style="font-size:.7rem; color:${outOfStock?'var(--rust)':'var(--ink-soft)'};">
+
+              ${outOfStock ? 'Sold out' : item.daily_stock + ' left'}
+
+            </span>
+
+            <button class="btn btn-sm btn-outline-board" ${outOfStock?'disabled':''} onclick="addToCart(${item.item_id})">Add</button>
+
+          </div>
+
+        </div>
+
+      </div>`;
+
+  });
+
+}
+
+
+
+function addToCart(id){
+
+  cart[id] = (cart[id]||0) + 1;
+
+  renderCart();
+
+}
+
+function changeQty(id, delta){
+
+  cart[id] = (cart[id]||0) + delta;
+
+  if(cart[id] <= 0) delete cart[id];
+
+  renderCart();
+
+}
+
+function renderCart(){
+
+  const body = document.getElementById("cartBody");
+
+  const footer = document.getElementById("cartFooter");
+
+  const ids = Object.keys(cart);
+
+  if(ids.length===0){
+
+    body.innerHTML = `<p class="text-center mono" style="color:var(--ink-soft); font-size:.85rem;">Cart is empty — add items from the menu.</p>`;
+
+    footer.style.display = "none";
+
+    return;
+
+  }
+
+  let subtotal = 0;
+
+  body.innerHTML = ids.map(id=>{
+
+    const item = MENU.find(m=>m.item_id==id);
+
+    subtotal += item.price * cart[id];
+
+    return `<div class="d-flex justify-content-between align-items-center mb-2">
+
+      <div>
+
+        <div style="font-size:.88rem;">${item.name}</div>
+
+        <div class="mono" style="font-size:.72rem; color:var(--ink-soft);">₹${item.price} each</div>
+
+      </div>
+
+      <div class="d-flex align-items-center gap-2">
+
+        <button class="btn btn-sm btn-outline-board" style="padding:0 .5rem;" onclick="changeQty(${id},-1)">−</button>
+
+        <span class="mono">${cart[id]}</span>
+
+        <button class="btn btn-sm btn-outline-board" style="padding:0 .5rem;" onclick="changeQty(${id},1)">+</button>
+
+      </div>
+
+    </div>`;
+
+  }).join("");
+
+  document.getElementById("subtotal").textContent = "₹" + subtotal;
+
+  footer.style.display = "block";
+
+}
+
+
+
+async function placeOrder(){
+
+  const ids = Object.keys(cart);
+
+  if(ids.length===0) return;
+
+  const slot = document.getElementById("slotSelect").value;
+
+  const items = ids.map(id => ({ item_id: Number(id), quantity: cart[id] }));
+
+
+
+  const btn = document.querySelector('#cartFooter button');
+
+  btn.disabled = true;
+
+
+
+  try {
+
+    const res = await fetch(`${API_BASE}/orders`, {
+
+      method: "POST",
+
+      credentials: "include",
+
+      headers: { "Content-Type": "application/json" },
+
+      body: JSON.stringify({ items, pickup_slot: slot, order_type: "preorder" })
+
+    });
+
+    const order = await res.json();
+
+
+
+    if(!res.ok){
+
+      alert(order.error || "Could not place order.");
+
+      btn.disabled = false;
+
+      return;
+
+    }
+
+
+
+    const itemsText = ids.map(id=>{
+
+      const item = MENU.find(m=>m.item_id==id);
+
+      return `${cart[id]}× ${item.name}`;
+
+    }).join(", ");
+
+
+
+    document.getElementById("ticketArea").innerHTML = `
+
+      <div class="ticket">
+
+        <div class="d-flex justify-content-between align-items-start">
+
+          <div>
+
+            <div class="mono text-uppercase" style="font-size:.65rem; color:var(--ink-soft);">Order #</div>
+
+            <div class="token-no">#${order.order_id}</div>
+
+          </div>
+
+          <span class="stamp stamp-placed">${order.status}</span>
+
+        </div>
+
+        <div class="seam"></div>
+
+        <div class="mono" style="font-size:.8rem;">${itemsText}</div>
+
+        <div class="mono mt-1" style="font-size:.75rem; color:var(--ink-soft);">Pickup slot: ${slot} · ₹${order.total_amount}</div>
+
+        <div class="mono mt-2" style="font-size:.72rem; color:var(--ink-soft);">Saved to the database — refresh order history below to see it.</div>
+
+      </div>`;
+
+
+
+    cart = {};
+
+    renderCart();
+
+    loadMenu(document.getElementById("catFilter").value); // stock just changed, reload it
+
+    loadOrderHistory();
+
+    loadWaitTime(); // your new order adds to the kitchen's load, so this should go up
+
+    document.getElementById("tracking").scrollIntoView({behavior:"smooth"});
+
+  } catch (err) {
+
+    alert("Could not reach the server. Is the backend running?");
+
+  } finally {
+
+    btn.disabled = false;
+
+  }
+
+}
+
+
+
+async function loadOrderHistory(){
+
+  const body = document.getElementById("historyBody");
+
+  try {
+
+    const res = await fetch(`${API_BASE}/student/orders`, { credentials: "include" });
+
+    const orders = await res.json();
+
+
+
+    if(!res.ok){
+      body.innerHTML = `<tr><td colspan="6" class="text-center mono" style="color:var(--rust);">${orders.error || "Could not load order history."}</td></tr>`;
+      return;
+    }
+    if(!Array.isArray(orders) || orders.length === 0){
+      body.innerHTML = `<tr><td colspan="6" class="text-center mono" style="color:var(--ink-soft); font-size:.85rem;">No orders yet — place one above.</td></tr>`;
+      return;
+    }
+
+    const statusClass = { Placed:"chip-placed", Preparing:"chip-preparing", Ready:"chip-ready", Collected:"chip-collected", Cancelled:"chip-placed" };
+
+    body.innerHTML = orders.map(o => `
+      <tr>
+        <td class="mono">#${o.order_id}</td>
+        <td>${o.items_summary || "—"}</td>
+        <td>${o.placed_at ? new Date(o.placed_at).toLocaleDateString() : "—"}</td>
+        <td>
+          <span class="chip ${statusClass[o.status] || ''}">${o.status}</span>
+          ${o.status !== "Cancelled" ? `<div class="mono mt-1" style="font-size:.62rem;color:var(--ink-soft);">${["Placed","Preparing","Ready","Collected"].map((step,i)=>`<span style="color:${["Placed","Preparing","Ready","Collected"].indexOf(o.status)>=i?'var(--magenta, #ad397e)':'var(--steel-line)'};">${step}</span>${i<3?' → ':''}`).join("")}</div>` : `<div class="mono mt-1" style="font-size:.62rem;color:var(--rust);">Order cancelled</div>`}
+        </td>
+        <td class="text-end mono">₹${Number(o.total_amount || 0).toFixed(2)}</td>
+        <td>${o.status === "Placed" ? `<button class="btn btn-sm btn-outline-board" onclick="cancelOrder(${o.order_id})">Cancel</button>` : `<span class="mono" style="color:var(--ink-soft);">—</span>`}</td>
+      </tr>`).join("");
+
+  } catch (err) {
+
+    body.innerHTML = `<tr><td colspan="6" class="text-center mono" style="color:var(--rust);">Could not load order history.</td></tr>`;
+
+  }
+
+}
+
+
+
+document.getElementById("catFilter").addEventListener("change", e=>renderMenu(e.target.value));
+
+loadMenu();
+
+loadWaitTime();
+
+loadOrderHistory();
+
+</script>
+
+</body>
+
+</html>

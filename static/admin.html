@@ -1,0 +1,1672 @@
+<!DOCTYPE html>
+
+
+
+<html lang="en">
+
+
+
+<head>
+
+
+
+<meta charset="UTF-8">
+
+
+
+<title>Admin | Campus Canteen Pre-Order and Queue Management System</title>
+
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Quicksand:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap">
+
+
+
+<link rel="stylesheet" href="style.css">
+
+
+
+</head>
+
+
+
+<body>
+
+
+
+
+
+
+
+<nav class="navbar canteen-nav navbar-dark navbar-expand-md py-2">
+
+
+
+  <div class="container">
+
+
+
+    <a class="navbar-brand" href="index.html">Campus Canteen Pre-Order and Queue Management System<small>Admin Window</small></a>
+
+
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav1">
+
+
+
+      <span class="navbar-toggler-icon"></span>
+
+
+
+    </button>
+
+
+
+    <div class="collapse navbar-collapse" id="nav1">
+
+
+
+      <ul class="navbar-nav ms-auto">
+
+
+
+        <li class="nav-item"><a class="nav-link active" href="#reports">Reports</a></li>
+
+
+
+        <li class="nav-item"><a class="nav-link" href="#menu">Menu &amp; Stock</a></li>
+
+
+
+        <li class="nav-item"><a class="nav-link" href="#accounts">Accounts</a></li>
+
+
+
+        <li class="nav-item"><a class="nav-link" href="index.html">Switch Window</a></li>
+
+
+
+        <li class="nav-item"><a class="nav-link" href="#" onclick="logout()">Log Out</a></li>
+
+
+
+      </ul>
+
+
+
+    </div>
+
+
+
+  </div>
+
+
+
+</nav>
+
+
+
+
+
+
+
+<div class="container py-4" id="reports">
+
+
+
+
+
+
+
+  <h4 class="mb-3">Today's Snapshot</h4>
+
+
+
+  <div class="row g-3 mb-4">
+
+
+
+    <div class="col-6 col-md-3">
+
+
+
+      <div class="stat-tile"><div class="num" id="statSales">—</div><div class="label">Sales today</div></div>
+
+
+
+    </div>
+
+
+
+    <div class="col-6 col-md-3">
+
+
+
+      <div class="stat-tile"><div class="num" id="statOrders">—</div><div class="label">Orders today</div></div>
+
+
+
+    </div>
+
+
+
+    <div class="col-6 col-md-3">
+
+
+
+      <div class="stat-tile"><div class="num" id="statPeakHour">—</div><div class="label">Peak ordering hour</div></div>
+
+
+
+    </div>
+
+
+
+    <div class="col-6 col-md-3">
+
+
+
+      <div class="stat-tile"><div class="num" id="statAvgPrep">—</div><div class="label">Avg. preparation time</div></div>
+
+
+
+    </div>
+
+
+
+  </div>
+
+
+
+
+
+
+
+  <div class="row g-3 mb-5">
+
+
+
+    <div class="col-lg-7">
+
+
+
+      <div class="panel">
+
+
+
+        <div class="panel-header">Most Popular Items (7 days)</div>
+
+
+
+        <div class="p-3">
+
+
+
+          <div class="mb-2 d-flex justify-content-between mono" style="font-size:.8rem;"><span>Veg Thali</span><span>142 orders</span></div>
+
+
+
+          <div class="stock-bar mb-3" style="height:8px;"><span style="width:92%; background:var(--marigold);"></span></div>
+
+
+
+          <div class="mb-2 d-flex justify-content-between mono" style="font-size:.8rem;"><span>Masala Dosa</span><span>118 orders</span></div>
+
+
+
+          <div class="stock-bar mb-3" style="height:8px;"><span style="width:76%; background:var(--marigold);"></span></div>
+
+
+
+          <div class="mb-2 d-flex justify-content-between mono" style="font-size:.8rem;"><span>Filter Coffee</span><span>97 orders</span></div>
+
+
+
+          <div class="stock-bar mb-3" style="height:8px;"><span style="width:63%; background:var(--marigold);"></span></div>
+
+
+
+          <div class="mb-2 d-flex justify-content-between mono" style="font-size:.8rem;"><span>Chicken Biryani</span><span>81 orders</span></div>
+
+
+
+          <div class="stock-bar mb-3" style="height:8px;"><span style="width:52%; background:var(--marigold);"></span></div>
+
+
+
+          <div class="mb-2 d-flex justify-content-between mono" style="font-size:.8rem;"><span>Bread Omelette</span><span>64 orders</span></div>
+
+
+
+          <div class="stock-bar" style="height:8px;"><span style="width:41%; background:var(--marigold);"></span></div>
+
+
+
+        </div>
+
+
+
+      </div>
+
+
+
+    </div>
+
+
+
+    <div class="col-lg-5">
+
+
+
+      <div class="panel h-100">
+
+
+
+        <div class="panel-header">Orders by Hour (Today)</div>
+
+
+
+        <div class="p-3 d-flex align-items-end gap-2" style="height:200px;" id="hourChart">
+
+
+
+          <p class="mono text-center w-100" style="color:var(--ink-soft); font-size:.8rem;">Loading…</p>
+
+
+
+        </div>
+
+
+
+        <div class="d-flex justify-content-between px-3 pb-3 mono" style="font-size:.65rem; color:var(--ink-soft);" id="hourChartLabels"></div>
+
+
+
+      </div>
+
+
+
+    </div>
+
+
+
+  </div>
+
+
+
+
+
+
+
+  <div id="menu" class="d-flex justify-content-between align-items-center mb-3">
+
+
+
+    <h4 class="mb-0">Menu &amp; Stock Management</h4>
+
+
+
+    <button class="btn btn-marigold btn-sm" data-bs-toggle="modal" data-bs-target="#addItemModal">+ Add Menu Item</button>
+
+
+
+  </div>
+
+
+
+
+
+
+
+  <div class="table-responsive panel mb-5">
+
+
+
+    <table class="table table-canteen mb-0 align-middle">
+
+
+
+      <thead>
+
+
+
+        <tr><th>Item</th><th>Category</th><th>Price</th><th>Prep time</th><th>Stock today</th><th>Status</th><th>Ready</th><th>Action</th></tr>
+
+
+
+      </thead>
+
+
+
+      <tbody id="adminMenuBody"></tbody>
+
+
+
+    </table>
+
+
+
+  </div>
+
+
+
+</div>
+
+
+
+
+
+
+
+<!-- Add Item Modal -->
+
+
+
+<div class="modal fade" id="addItemModal" tabindex="-1">
+
+
+
+  <div class="modal-dialog">
+
+
+
+    <div class="modal-content">
+
+
+
+      <div class="modal-header" style="background:var(--board-dark); color:var(--paper);">
+
+
+
+        <h5 class="modal-title">Add Menu Item</h5>
+
+
+
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+
+
+
+      </div>
+
+
+
+      <div class="modal-body">
+
+
+
+        <div id="addItemError" class="mb-2" style="display:none;">
+
+
+
+          <span class="chip chip-placed">Fill in all fields</span>
+
+
+
+        </div>
+
+
+
+        <div class="mb-3">
+
+
+
+          <label class="form-label mono" style="font-size:.75rem; text-transform:uppercase;">Item name</label>
+
+
+
+          <input type="text" class="form-control" id="newItemName" placeholder="e.g. Paneer Roll">
+
+
+
+        </div>
+
+
+
+        <div class="row g-2">
+
+
+
+          <div class="col-6">
+
+
+
+            <label class="form-label mono" style="font-size:.75rem; text-transform:uppercase;">Category</label>
+
+
+
+            <select class="form-select" id="newItemCategory"><option>Meals</option><option>Snacks</option><option>Beverages</option></select>
+
+
+
+          </div>
+
+
+
+          <div class="col-6">
+
+
+
+            <label class="form-label mono" style="font-size:.75rem; text-transform:uppercase;">Price (₹)</label>
+
+
+
+            <input type="number" class="form-control" id="newItemPrice" placeholder="45">
+
+
+
+          </div>
+
+
+
+        </div>
+
+
+
+        <div class="row g-2 mt-1">
+
+
+
+          <div class="col-6">
+
+
+
+            <label class="form-label mono" style="font-size:.75rem; text-transform:uppercase;">Prep time (min)</label>
+
+
+
+            <input type="number" class="form-control" id="newItemPrep" placeholder="6">
+
+
+
+          </div>
+
+
+
+          <div class="col-6">
+
+
+
+            <label class="form-label mono" style="font-size:.75rem; text-transform:uppercase;">Opening stock</label>
+
+
+
+            <input type="number" class="form-control" id="newItemStock" placeholder="15">
+
+
+
+          </div>
+
+
+
+        </div>
+
+
+
+      </div>
+
+
+
+      <div class="modal-footer">
+
+
+
+        <button class="btn btn-outline-board" data-bs-dismiss="modal">Cancel</button>
+
+
+
+        <button class="btn btn-marigold" onclick="saveNewItem()">Save Item</button>
+
+
+
+      </div>
+
+
+
+    </div>
+
+
+
+  </div>
+
+
+
+</div> <!-- Close addItemModal -->
+
+
+
+  <div id="accounts" class="mb-5">
+
+
+
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+
+
+
+      <h4 class="mb-0">Staff &amp; Admin Accounts</h4>
+
+
+
+    </div>
+
+
+
+    <div class="panel p-3 p-md-4">
+
+
+
+      <p class="mb-3" style="color:var(--ink-soft);">Create login accounts for canteen staff or other administrators.</p>
+
+
+
+      <div id="accountMessage" class="mb-3" style="display:none;"><span class="chip chip-placed"></span></div>
+
+
+
+      <form id="accountForm" onsubmit="createAccount(event)">
+
+
+
+        <div class="row g-3">
+
+
+
+          <div class="col-md-6">
+
+
+
+            <label for="accountName" class="form-label mono" style="font-size:.75rem;text-transform:uppercase;">Full name</label>
+
+
+
+            <input id="accountName" class="form-control" type="text" maxlength="120" required placeholder="e.g. Alex Thomas">
+
+
+
+          </div>
+
+
+
+          <div class="col-md-6">
+
+
+
+            <label for="accountCode" class="form-label mono" style="font-size:.75rem;text-transform:uppercase;">Staff/Admin ID</label>
+
+
+
+            <input id="accountCode" class="form-control" type="text" maxlength="40" required placeholder="e.g. STAFF002">
+
+
+
+          </div>
+
+
+
+          <div class="col-md-6">
+
+
+
+            <label for="accountRole" class="form-label mono" style="font-size:.75rem;text-transform:uppercase;">Account role</label>
+
+
+
+            <select id="accountRole" class="form-select" required>
+
+
+
+              <option value="staff">Canteen Staff</option>
+
+
+
+              <option value="admin">Admin</option>
+
+
+
+            </select>
+
+
+
+          </div>
+
+
+
+          <div class="col-md-6">
+
+
+
+            <label for="accountPassword" class="form-label mono" style="font-size:.75rem;text-transform:uppercase;">Temporary password</label>
+
+
+
+            <input id="accountPassword" class="form-control" type="password" minlength="6" required placeholder="At least 6 characters" autocomplete="new-password">
+
+
+
+          </div>
+
+
+
+        </div>
+
+
+
+        <div class="mt-3 d-flex justify-content-end">
+
+
+
+          <button id="createAccountButton" class="btn btn-marigold" type="submit">Create Account</button>
+
+
+
+        </div>
+
+
+
+      </form>
+
+
+
+    </div>
+
+
+
+  
+
+    <div class="table-responsive panel mt-3">
+      <table class="table table-canteen mb-0 align-middle">
+        <thead><tr><th>Name</th><th>ID</th><th>Role</th><th>Created</th><th>Action</th></tr></thead>
+        <tbody id="accountListBody"><tr><td colspan="5" class="text-center mono">Loading accounts…</td></tr></tbody>
+      </table>
+    </div>
+</div>
+
+
+
+
+
+
+
+<footer class="canteen-footer py-3 mt-5">
+
+
+
+  <div class="container">23CSE202 · Campus Canteen Pre-Order &amp; Queue Management System</div>
+
+
+
+</footer>
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+<script>
+
+
+
+const API_BASE = "/api"; // change if your backend runs elsewhere
+
+
+
+
+
+
+
+// --- Auth guard: verify the session cookie with the backend ---
+
+
+
+(async function checkAuth(){
+
+
+
+  try {
+
+
+
+    const res = await fetch(`${API_BASE}/auth/me`, { credentials: "include" });
+
+
+
+    if(!res.ok){ window.location.href = "login.html?role=admin"; return; }
+
+
+
+    const data = await res.json();
+
+
+
+    if(data.role !== "admin"){
+
+
+
+      window.location.href = "login.html?role=admin";
+
+
+
+    }
+
+
+
+  } catch (err) {
+
+
+
+    window.location.href = "login.html?role=admin";
+
+
+
+  }
+
+
+
+})();
+
+
+
+
+
+
+
+async function logout(){
+
+
+
+  await fetch(`${API_BASE}/auth/logout`, { method: "POST", credentials: "include" });
+
+
+
+  window.location.href = "login.html";
+
+
+
+}
+
+
+
+
+
+
+
+let items = []; // loaded from the backend
+
+
+
+
+
+
+
+function showAccountMessage(message, success=false){
+
+
+
+  const box = document.getElementById("accountMessage");
+
+
+
+  const chip = box.querySelector(".chip");
+
+
+
+  chip.textContent = message;
+
+
+
+  chip.className = `chip ${success ? "chip-ready" : "chip-placed"}`;
+
+
+
+  box.style.display = "block";
+
+
+
+}
+
+
+
+
+
+
+
+
+function escapeHtml(value){
+  return String(value ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+async function loadAccounts(){
+  const body = document.getElementById("accountListBody");
+  if(!body) return;
+  try {
+    const res = await fetch(`${API_BASE}/admin/accounts`, {credentials:"include"});
+    const rows = await res.json();
+    if(!res.ok) throw new Error(rows.error || "Could not load accounts.");
+    body.innerHTML = rows.length ? rows.map(a => `
+      <tr><td>${escapeHtml(a.name)}</td><td class="mono">${escapeHtml(a.staff_code)}</td>
+      <td>${a.role === "admin" ? "Admin" : "Staff"}</td>
+      <td class="mono">${a.created_at ? new Date(a.created_at).toLocaleDateString() : "—"}</td>
+      <td><button class="btn btn-sm btn-outline-board" onclick="deleteAccount(${a.staff_id})">Delete</button></td></tr>`).join("")
+      : '<tr><td colspan="5" class="text-center mono">No accounts found.</td></tr>';
+  } catch(err) {
+    body.innerHTML = `<tr><td colspan="5" class="text-center mono" style="color:var(--rust);">${escapeHtml(err.message)}</td></tr>`;
+  }
+}
+async function deleteAccount(id){
+  if(!confirm("Delete this staff/admin account?")) return;
+  try {
+    const res = await fetch(`${API_BASE}/admin/accounts/${id}`, {method:"DELETE", credentials:"include"});
+    const data = await res.json();
+    if(!res.ok){ alert(data.error || "Could not delete account."); return; }
+    loadAccounts();
+  } catch(err) { alert("Could not reach the server."); }
+}
+async function deleteMenuItem(itemId){
+  if(!confirm("Delete this menu item? Items already used in order history are protected; set their stock to 0 instead.")) return;
+  try {
+    const res = await fetch(`${API_BASE}/admin/menu/${itemId}`, {method:"DELETE", credentials:"include"});
+    const data = await res.json();
+    if(!res.ok){ alert(data.error || "Could not delete menu item."); return; }
+    loadMenu();
+  } catch(err) { alert("Could not reach the server."); }
+}
+
+async function createAccount(event){
+
+
+
+  event.preventDefault();
+
+
+
+  const button = document.getElementById("createAccountButton");
+
+
+
+  const payload = {
+
+
+
+    name: document.getElementById("accountName").value.trim(),
+
+
+
+    staff_code: document.getElementById("accountCode").value.trim(),
+
+
+
+    role: document.getElementById("accountRole").value,
+
+
+
+    password: document.getElementById("accountPassword").value
+
+
+
+  };
+
+
+
+  if(!payload.name || !payload.staff_code || !payload.password){
+
+
+
+    showAccountMessage("Fill in all fields.");
+
+
+
+    return;
+
+
+
+  }
+
+
+
+  if(payload.password.length < 6){
+
+
+
+    showAccountMessage("Password must be at least 6 characters.");
+
+
+
+    return;
+
+
+
+  }
+
+
+
+  button.disabled = true;
+
+
+
+  try {
+
+
+
+    const res = await fetch(`${API_BASE}/admin/accounts`, {
+
+
+
+      method: "POST",
+
+
+
+      credentials: "include",
+
+
+
+      headers: { "Content-Type": "application/json" },
+
+
+
+      body: JSON.stringify(payload)
+
+
+
+    });
+
+
+
+    const data = await res.json();
+
+
+
+    if(!res.ok){
+
+
+
+      showAccountMessage(data.error || "Could not create account.");
+
+
+
+      return;
+
+
+
+    }
+
+
+
+    showAccountMessage(`${data.account.role === "admin" ? "Admin" : "Staff"} account ${data.account.staff_code} created successfully.`, true);
+    loadAccounts();
+
+
+
+    document.getElementById("accountForm").reset();
+
+
+
+  } catch(err) {
+
+
+
+    showAccountMessage("Could not reach the server.");
+
+
+
+  } finally {
+
+
+
+    button.disabled = false;
+
+
+
+  }
+
+
+
+}
+
+
+
+
+
+
+
+async function loadMenu(){
+
+
+
+  try {
+
+
+
+    const res = await fetch(`${API_BASE}/menu`);
+
+
+
+    items = await res.json();
+
+
+
+    renderTable();
+
+
+
+  } catch (err) {
+
+
+
+    document.getElementById("adminMenuBody").innerHTML =
+
+
+
+      `<tr><td colspan="8" class="text-center mono" style="color:var(--rust);">Could not load the menu.</td></tr>`;
+
+
+
+  }
+
+
+
+}
+
+
+
+
+
+
+
+function renderTable(){
+
+
+
+  const body = document.getElementById("adminMenuBody");
+
+
+
+  body.innerHTML = items.map(it=>{
+
+
+
+    const out = !it.is_available;
+
+
+
+    return `<tr>
+
+
+
+      <td>${it.name}</td>
+
+
+
+      <td class="mono" style="font-size:.8rem;">${it.category}</td>
+
+
+
+      <td class="mono">₹${it.price}</td>
+
+
+
+      <td class="mono">${it.prep_time_min} min</td>
+
+
+
+      <td style="width:140px;">
+
+
+
+        <input type="number" class="form-control form-control-sm" value="${it.daily_stock}" min="0"
+
+
+
+          onchange="updateStock(${it.item_id}, this.value)">
+
+
+
+      </td>
+
+
+
+      <td>${out ? '<span class="chip chip-placed">Sold out</span>' : '<span class="chip chip-ready">Available</span>'}</td>
+
+
+
+      <td><span class="mono" style="font-size:.7rem; color:var(--ink-soft);">${it.ready_quantity} ready</span></td>
+
+      <td><button class="btn btn-sm btn-outline-board" onclick="deleteMenuItem(${it.item_id})">Delete</button></td>
+
+
+
+    </tr>`;
+
+
+
+  }).join("");
+
+
+
+}
+
+
+
+
+
+
+
+async function updateStock(itemId, val){
+
+
+
+  const newStock = parseInt(val) || 0;
+
+
+
+  try {
+
+
+
+    const res = await fetch(`${API_BASE}/admin/menu/${itemId}`, {
+
+
+
+      method: "PUT",
+
+
+
+      credentials: "include",
+
+
+
+      headers: { "Content-Type": "application/json" },
+
+
+
+      body: JSON.stringify({ daily_stock: newStock })
+
+
+
+    });
+
+
+
+    if(!res.ok){
+
+
+
+      const data = await res.json();
+
+
+
+      alert(data.error || "Could not update stock.");
+
+
+
+      loadMenu(); // revert the input to the real value
+
+
+
+      return;
+
+
+
+    }
+
+
+
+    loadMenu(); // is_available may have flipped via the trigger — reload to reflect it
+
+
+
+  } catch (err) {
+
+
+
+    alert("Could not reach the server.");
+
+
+
+  }
+
+
+
+}
+
+
+
+
+
+
+
+async function loadPopularItems(){
+
+
+
+  const container = document.querySelector('.panel .p-3'); // "Most Popular Items" panel body
+
+
+
+  try {
+
+
+
+    const res = await fetch(`${API_BASE}/admin/reports/popular-items`, { credentials: "include" });
+
+
+
+    const rows = await res.json();
+
+
+
+    if(!res.ok || rows.length === 0){
+
+
+
+      container.innerHTML = `<p class="mono text-center" style="color:var(--ink-soft); font-size:.8rem;">No orders yet.</p>`;
+
+
+
+      return;
+
+
+
+    }
+
+
+
+    const max = Math.max(...rows.map(r => Number(r.times_ordered)));
+
+
+
+    container.innerHTML = rows.slice(0, 5).map(r => {
+
+
+
+      const pct = Math.round((Number(r.times_ordered) / max) * 100);
+
+
+
+      return `
+
+
+
+        <div class="mb-2 d-flex justify-content-between mono" style="font-size:.8rem;"><span>${r.name}</span><span>${r.times_ordered} orders</span></div>
+
+
+
+        <div class="stock-bar mb-3" style="height:8px;"><span style="width:${pct}%; background:var(--marigold);"></span></div>`;
+
+
+
+    }).join("");
+
+
+
+  } catch (err) {
+
+
+
+    container.innerHTML = `<p class="mono text-center" style="color:var(--rust); font-size:.8rem;">Could not load report.</p>`;
+
+
+
+  }
+
+
+
+}
+
+
+
+
+
+
+
+async function loadSummary(){
+
+
+
+  try {
+
+
+
+    const res = await fetch(`${API_BASE}/admin/reports/summary`, { credentials: "include" });
+
+
+
+    const data = await res.json();
+
+
+
+    document.getElementById("statSales").textContent = "₹" + data.salesToday;
+
+
+
+    document.getElementById("statOrders").textContent = data.ordersToday;
+
+
+
+    document.getElementById("statPeakHour").textContent =
+
+
+
+      data.peakHour === null ? "—" : `${data.peakHour}:00–${data.peakHour + 1}:00`;
+
+
+
+    document.getElementById("statAvgPrep").textContent =
+
+
+
+      data.avgPrepMinutes === null ? "No data yet" : `${data.avgPrepMinutes} min`;
+
+
+
+  } catch (err) {
+
+
+
+    console.error("Summary load failed", err);
+
+
+
+  }
+
+
+
+}
+
+
+
+
+
+
+
+async function loadHourChart(){
+
+
+
+  const chart = document.getElementById("hourChart");
+
+
+
+  const labels = document.getElementById("hourChartLabels");
+
+
+
+  try {
+
+
+
+    const res = await fetch(`${API_BASE}/admin/reports/orders-by-hour`, { credentials: "include" });
+
+
+
+    const rows = await res.json();
+
+
+
+
+
+
+
+    if(!res.ok || rows.length === 0){
+
+
+
+      chart.innerHTML = `<p class="mono text-center w-100" style="color:var(--ink-soft); font-size:.8rem;">No orders yet today.</p>`;
+
+
+
+      labels.innerHTML = "";
+
+
+
+      return;
+
+
+
+    }
+
+
+
+
+
+
+
+    const max = Math.max(...rows.map(r => r.count));
+
+
+
+    chart.innerHTML = rows.map(r => {
+
+
+
+      const pct = Math.round((r.count / max) * 100);
+
+
+
+      return `<div style="flex:1; background:var(--marigold); height:${pct}%; border-radius:2px 2px 0 0;" title="${r.hour}:00 — ${r.count} orders"></div>`;
+
+
+
+    }).join("");
+
+
+
+    labels.innerHTML = rows.map(r => `<span>${r.hour}</span>`).join("");
+
+
+
+  } catch (err) {
+
+
+
+    chart.innerHTML = `<p class="mono text-center w-100" style="color:var(--rust); font-size:.8rem;">Could not load chart.</p>`;
+
+
+
+  }
+
+
+
+}
+
+
+
+
+
+
+
+async function saveNewItem(){
+
+
+
+  const name = document.getElementById("newItemName").value.trim();
+
+
+
+  const category = document.getElementById("newItemCategory").value;
+
+
+
+  const price = parseFloat(document.getElementById("newItemPrice").value);
+
+
+
+  const prep_time_min = parseInt(document.getElementById("newItemPrep").value);
+
+
+
+  const daily_stock = parseInt(document.getElementById("newItemStock").value) || 0;
+
+
+
+
+
+
+
+  const errBox = document.getElementById("addItemError");
+
+
+
+  if(!name || isNaN(price) || isNaN(prep_time_min)){
+
+
+
+    errBox.style.display = "block";
+
+
+
+    return;
+
+
+
+  }
+
+
+
+  errBox.style.display = "none";
+
+
+
+
+
+
+
+  try {
+
+
+
+    const res = await fetch(`${API_BASE}/admin/menu`, {
+
+
+
+      method: "POST",
+
+
+
+      credentials: "include",
+
+
+
+      headers: { "Content-Type": "application/json" },
+
+
+
+      body: JSON.stringify({ name, category, price, prep_time_min, daily_stock, ready_quantity: 0 })
+
+
+
+    });
+
+
+
+    const data = await res.json();
+
+
+
+    if(!res.ok){
+
+
+
+      alert(data.error || "Could not add item.");
+
+
+
+      return;
+
+
+
+    }
+
+
+
+
+
+
+
+    // Close the modal and reset the form
+
+
+
+    bootstrap.Modal.getInstance(document.getElementById("addItemModal")).hide();
+
+
+
+    document.getElementById("newItemName").value = "";
+
+
+
+    document.getElementById("newItemPrice").value = "";
+
+
+
+    document.getElementById("newItemPrep").value = "";
+
+
+
+    document.getElementById("newItemStock").value = "";
+
+
+
+
+
+
+
+    loadMenu(); // show the new item in the table
+
+
+
+  } catch (err) {
+
+
+
+    alert("Could not reach the server.");
+
+
+
+  }
+
+
+
+}
+
+
+
+
+
+
+
+loadMenu();
+
+
+
+loadPopularItems();
+
+
+
+loadSummary();
+
+
+
+loadHourChart();
+
+
+
+</script>
+
+
+
+</body>
+
+
+
+</html>
